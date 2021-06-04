@@ -41,10 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        list = new ArrayList<>();
-        adapter = new MyListAdapter(this, R.layout.listview, list);
-        lvAll.setAdapter(adapter);
         if (v == btnSelectAll) {
+            list = new ArrayList<>();
 //            Log.d("mytag", "selectAll");
             SQLiteDatabase db = helper.getReadableDatabase();
             String sql = "select * from tbl_student" +
@@ -60,11 +58,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 StudentVo vo = new StudentVo(sno, sname, syear, gender, major, score);
                 list.add(vo);
             }
-
-
-
+            adapter = new MyListAdapter(this, R.layout.listview, list);
+            lvAll.setAdapter(adapter);
         } else if (v == btnDetail) {
 //            Log.d("mytag", "Detail");
+            Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+            startActivity(intent);
         } else if (v == btnInsert) {
 //            Log.d("mytag", "Insert");
             Intent intent = new Intent(MainActivity.this, InsertActivity.class);
