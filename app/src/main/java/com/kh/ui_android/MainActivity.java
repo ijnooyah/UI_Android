@@ -104,16 +104,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btnUpdate.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            edtSNo2.setFocusable(true);
-                            edtSname2.setFocusable(true);
-                            edtSYear2.setFocusable(true);
-                            edtMajor2.setFocusable(true);
-                            edtScore2.setFocusable(true);
+                            edtSNo2.setEnabled(true);
+                            edtSname2.setEnabled(true);
+                            edtSYear2.setEnabled(true);
+                            edtMajor2.setEnabled(true);
+                            edtScore2.setEnabled(true);
+                            edtSNo2.setEnabled(true);
                             rdoMale2.setClickable(true);
-                            edtSNo2.setFocusable(true);
                             rdoFemale2.setClickable(true);
-                            boolean result = edtMajor2.isFocusable();
-                            Log.d("mytag", String.valueOf(result));
+
                         }
                     });
                     dlg.setPositiveButton("닫기", null);

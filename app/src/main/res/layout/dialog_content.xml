@@ -39,7 +39,7 @@
             android:id="@+id/edtSNo2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false" />
+            android:enabled="false" />
 
         <TextView
             android:layout_width="match_parent"
@@ -50,7 +50,7 @@
             android:id="@+id/edtSName2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false" />
+            android:enabled="false" />
 
         <TextView
             android:layout_width="match_parent"
@@ -61,7 +61,7 @@
             android:id="@+id/edtSYear2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false" />
+            android:enabled="false" />
 
         <TextView
             android:layout_width="match_parent"
@@ -98,7 +98,7 @@
             android:id="@+id/edtMajor2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false" />
+            android:enabled="false" />
 
         <TextView
             android:layout_width="match_parent"
@@ -109,7 +109,7 @@
             android:id="@+id/edtScore2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false" />
+            android:enabled="false" />
 
     </LinearLayout>
 
