@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        list = new ArrayList<>();
         adapter = new MyListAdapter(this, R.layout.listview, list);
         lvAll.setAdapter(adapter);
         if (v == btnSelectAll) {
@@ -49,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String sql = "select * from tbl_student" +
                     "     order by sno";
             Cursor cursor = db.rawQuery(sql, null);
-            list = new ArrayList<>();
             while (cursor.moveToNext()) {
                 String sno = cursor.getString(0);
                 String sname = cursor.getString(1);
