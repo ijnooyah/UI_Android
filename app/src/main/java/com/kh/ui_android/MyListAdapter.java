@@ -39,18 +39,18 @@ public class MyListAdapter extends BaseAdapter {
         if(convertView == null) {
             convertView = View.inflate(this.context, this.view, null);
         }
-        TextView tvSno, tvSname, tvSyear, tvGender, tvMajor, tvScore;
-        tvSno = convertView.findViewById(R.id.tvSno);
-        tvSname = convertView.findViewById(R.id.tvSname);
-        tvSyear = convertView.findViewById(R.id.tvSyear);
+        TextView tvSNo, tvSName, tvSYear, tvGender, tvMajor, tvScore;
+        tvSNo = convertView.findViewById(R.id.tvSNo);
+        tvSName = convertView.findViewById(R.id.tvSName);
+        tvSYear = convertView.findViewById(R.id.tvSYear);
         tvGender = convertView.findViewById(R.id.tvGender);
         tvMajor = convertView.findViewById(R.id.tvMajor);
         tvScore = convertView.findViewById(R.id.tvScore);
 
         StudentVo vo = list.get(position);
-        tvSno.setText(vo.getSno());
-        tvSname.setText(vo.getSname());
-        tvSyear.setText(String.valueOf(vo.getSyear()));
+        tvSNo.setText(vo.getSno());
+        tvSName.setText(vo.getSname());
+        tvSYear.setText(String.valueOf(vo.getSyear()));
         tvGender.setText(vo.getGender());
         tvMajor.setText(vo.getMajor());
         tvScore.setText(String.valueOf(vo.getScore()));
