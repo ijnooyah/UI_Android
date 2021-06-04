@@ -16,7 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class InsertActivity extends AppCompatActivity {
-    EditText edtSNo, edtSname, edtSYear, edtMajor, edtScore;
+    EditText edtSNo, edtSName, edtSYear, edtMajor, edtScore;
     RadioGroup rGroup;
     RadioButton rdoMale, rdoFemale;
     Button btnRegister;
@@ -27,7 +27,7 @@ public class InsertActivity extends AppCompatActivity {
         setContentView(R.layout.activity_insert);
 
         edtSNo = findViewById(R.id.edtSNo);
-        edtSname = findViewById(R.id.edtSName);
+        edtSName = findViewById(R.id.edtSName);
         edtSYear = findViewById(R.id.edtSYear);
         edtMajor = findViewById(R.id.edtMajor);
         edtScore = findViewById(R.id.edtScore);
@@ -43,7 +43,7 @@ public class InsertActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 String sno = edtSNo.getText().toString();
-                String sname = edtSname.getText().toString();
+                String sname = edtSName.getText().toString();
                 String strYear = edtSYear.getText().toString();
                 int syear;
                 String gender = null;

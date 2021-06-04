@@ -73,9 +73,9 @@ public class DetailActivity extends AppCompatActivity {
 //            Log.d("mytag", "selectAll");
                     SQLiteDatabase db = helper.getReadableDatabase();
                     String sql = "select * from tbl_student" +
-                            "     where major = '" + major + "'" +
+                            "     where major = ?" +
                             "     order by sno";
-                    Cursor cursor = db.rawQuery(sql, null);
+                    Cursor cursor = db.rawQuery(sql, new String[]{major});
                     Log.d("mytag", cursor.toString());
                     while (cursor.moveToNext()) {
                         String sno = cursor.getString(0);
