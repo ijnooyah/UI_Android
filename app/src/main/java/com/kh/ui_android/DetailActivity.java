@@ -65,6 +65,7 @@ public class DetailActivity extends AppCompatActivity {
                     }
                     lAdapter = new MyListAdapter(DetailActivity.this, R.layout.listview, list);
                     lvDetail.setAdapter(lAdapter);
+                    cursor.close();
                 } else if (slectedItem.equals("전공")) {
                     Log.d("mytag", "전공선택");
                     list = new ArrayList<>();
@@ -72,9 +73,10 @@ public class DetailActivity extends AppCompatActivity {
 //            Log.d("mytag", "selectAll");
                     SQLiteDatabase db = helper.getReadableDatabase();
                     String sql = "select * from tbl_student" +
-                            "     where major = " + major +
+                            "     where major = '" + major + "'" +
                             "     order by sno";
                     Cursor cursor = db.rawQuery(sql, null);
+                    Log.d("mytag", cursor.toString());
                     while (cursor.moveToNext()) {
                         String sno = cursor.getString(0);
                         String sname = cursor.getString(1);
@@ -86,24 +88,9 @@ public class DetailActivity extends AppCompatActivity {
                     }
                     lAdapter = new MyListAdapter(DetailActivity.this, R.layout.listview, list);
                     lvDetail.setAdapter(lAdapter);
+                    cursor.close();
                 }
-//                List<StudentVo> list = new ArrayList<>();
-//                SQLiteDatabase db = helper.getReadableDatabase();
-//                String sql = "select * from tbl_student" +
-//                        "     order by sno";
-//                Cursor cursor = db.rawQuery(sql, null);
-//                while (cursor.moveToNext()) {
-//                    String sno = cursor.getString(0);
-//                    String sname = cursor.getString(1);
-//                    int syear = cursor.getInt(2);
-//                    String gender = cursor.getString(3);
-//                    String major = cursor.getString(4);
-//                    int score = cursor.getInt(5);
-//                    StudentVo vo = new StudentVo(sno, sname, syear, gender, major, score);
-//                    list.add(vo);
-//                }
-//                adapter = new MyListAdapter(this, R.layout.listview, list);
-//                lvAll.setAdapter(adapter);
+
             }
         });
     }
