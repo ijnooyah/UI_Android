@@ -25,6 +25,7 @@ public class DetailActivity extends AppCompatActivity {
     ArrayAdapter<String> sAdapter;
     MyListAdapter lAdapter;
     MyDBHelper helper;
+    List<StudentVo> list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,39 +40,70 @@ public class DetailActivity extends AppCompatActivity {
         sAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, data);
         spinnerDetail.setAdapter(sAdapter);
 
-        String option = "";
-        spinnerDetail.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Log.d("mytag", data[position]);
-                option = data[position];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
         btnSelectDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (data[])
-                List<StudentVo> list = new ArrayList<>();
-                SQLiteDatabase db = helper.getReadableDatabase();
-                String sql = "select * from tbl_student" +
-                        "     order by sno";
-                Cursor cursor = db.rawQuery(sql, null);
-                while (cursor.moveToNext()) {
-                    String sno = cursor.getString(0);
-                    String sname = cursor.getString(1);
-                    int syear = cursor.getInt(2);
-                    String gender = cursor.getString(3);
-                    String major = cursor.getString(4);
-                    int score = cursor.getInt(5);
-                    StudentVo vo = new StudentVo(sno, sname, syear, gender, major, score);
-                    list.add(vo);
+                String slectedItem = spinnerDetail.getSelectedItem().toString();
+                if (slectedItem.equals("학번")) {
+                    Log.d("mytag", "학번선택");
+                    list = new ArrayList<>();
+                    String sno = edtDetail.getText().toString();
+//            Log.d("mytag", "selectAll");
+                    SQLiteDatabase db = helper.getReadableDatabase();
+                    String sql = "select * from tbl_student" +
+                            "     where sno = " + sno +
+                            "     order by sno";
+                    Cursor cursor = db.rawQuery(sql, null);
+                    while (cursor.moveToNext()) {
+                        String sname = cursor.getString(1);
+                        int syear = cursor.getInt(2);
+                        String gender = cursor.getString(3);
+                        String major = cursor.getString(4);
+                        int score = cursor.getInt(5);
+                        StudentVo vo = new StudentVo(sno, sname, syear, gender, major, score);
+                        list.add(vo);
+                    }
+                    lAdapter = new MyListAdapter(DetailActivity.this, R.layout.listview, list);
+                    lvDetail.setAdapter(lAdapter);
+                } else if (slectedItem.equals("전공")) {
+                    Log.d("mytag", "전공선택");
+                    list = new ArrayList<>();
+                    String major = edtDetail.getText().toString().trim();
+//            Log.d("mytag", "selectAll");
+                    SQLiteDatabase db = helper.getReadableDatabase();
+                    String sql = "select * from tbl_student" +
+                            "     where major = " + major +
+                            "     order by sno";
+                    Cursor cursor = db.rawQuery(sql, null);
+                    while (cursor.moveToNext()) {
+                        String sno = cursor.getString(0);
+                        String sname = cursor.getString(1);
+                        int syear = cursor.getInt(2);
+                        String gender = cursor.getString(3);
+                        int score = cursor.getInt(5);
+                        StudentVo vo = new StudentVo(sno, sname, syear, gender, major, score);
+                        list.add(vo);
+                    }
+                    lAdapter = new MyListAdapter(DetailActivity.this, R.layout.listview, list);
+                    lvDetail.setAdapter(lAdapter);
                 }
-                adapter = new MyListAdapter(this, R.layout.listview, list);
-                lvAll.setAdapter(adapter);
+//                List<StudentVo> list = new ArrayList<>();
+//                SQLiteDatabase db = helper.getReadableDatabase();
+//                String sql = "select * from tbl_student" +
+//                        "     order by sno";
+//                Cursor cursor = db.rawQuery(sql, null);
+//                while (cursor.moveToNext()) {
+//                    String sno = cursor.getString(0);
+//                    String sname = cursor.getString(1);
+//                    int syear = cursor.getInt(2);
+//                    String gender = cursor.getString(3);
+//                    String major = cursor.getString(4);
+//                    int score = cursor.getInt(5);
+//                    StudentVo vo = new StudentVo(sno, sname, syear, gender, major, score);
+//                    list.add(vo);
+//                }
+//                adapter = new MyListAdapter(this, R.layout.listview, list);
+//                lvAll.setAdapter(adapter);
             }
         });
     }
