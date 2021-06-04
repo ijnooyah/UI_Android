@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,12 +78,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     dlg.setView(dlgView);
                     //다이얼로그에 학생상세정보 끌고오기
                     StudentVo vo = list.get(position);
-                    EditText edtSNo2, edtSname2, edtSYear2, edtMajor2, edtScore2;
+                    EditText edtSNo2, edtSName2, edtSYear2, edtMajor2, edtScore2;
                     RadioGroup rGroup2;
                     RadioButton rdoMale2, rdoFemale2;
                     Button btnUpdate, btnDelete;
                     edtSNo2 = dlgView.findViewById(R.id.edtSNo2);
-                    edtSname2 = dlgView.findViewById(R.id.edtSName2);
+                    edtSName2 = dlgView.findViewById(R.id.edtSName2);
                     edtSYear2 = dlgView.findViewById(R.id.edtSYear2);
                     edtMajor2 = dlgView.findViewById(R.id.edtMajor2);
                     edtScore2 = dlgView.findViewById(R.id.edtScore2);
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btnUpdate = dlgView.findViewById(R.id.btnUpdate);
                     btnDelete = dlgView.findViewById(R.id.btnDelete);
                     edtSNo2.setText(vo.getSno());
-                    edtSname2.setText(vo.getSname());
+                    edtSName2.setText(vo.getSname());
                     edtSYear2.setText(String.valueOf(vo.getSyear()));
                     edtMajor2.setText(vo.getMajor());
                     edtScore2.setText(String.valueOf(vo.getScore()));
@@ -104,8 +105,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btnUpdate.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+
                             edtSNo2.setEnabled(true);
-                            edtSname2.setEnabled(true);
+                            edtSName2.setEnabled(true);
                             edtSYear2.setEnabled(true);
                             edtMajor2.setEnabled(true);
                             edtScore2.setEnabled(true);
@@ -113,6 +115,101 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             rdoMale2.setClickable(true);
                             rdoFemale2.setClickable(true);
 
+                            String sno = edtSNo2.getText().toString();
+                            String sname = edtSName2.getText().toString();
+                            String strYear = edtSYear2.getText().toString();
+                            int syear;
+                            String gender = null;
+                            String major = edtMajor2.getText().toString();
+                            String strScore = edtScore2.getText().toString();
+                            int score;
+
+                            if(rdoMale2.isChecked()) {
+                                gender = rdoMale2.getText().toString();
+                            } else if (rdoFemale2.isChecked()) {
+                                gender = rdoFemale2.getText().toString();
+                            }
+                            // 입력사항 조건 설정
+
+                            if (sno.trim().length() == 0) {
+                                Toast.makeText(getApplicationContext(), "학번 기입 필수", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if (sname.trim().length() == 0) {
+                                Toast.makeText(getApplicationContext(), "이름 기입 필수", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if (strYear.trim().length() == 0) {
+                                Toast.makeText(getApplicationContext(), "학년 기입 필수", Toast.LENGTH_SHORT).show();
+                                return;
+                            } else {
+                                try {
+                                    syear = Integer.parseInt(strYear);
+                                    if(syear > 4 || syear < 1) {
+                                        Toast.makeText(getApplicationContext(), "1~4사이의 숫자만 입력 가능", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                } catch (NumberFormatException e) {
+                                    Toast.makeText(getApplicationContext(), "1~4사이의 숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();                        return;
+                                }
+
+                            }
+                            if (gender == null) {
+                                Toast.makeText(getApplicationContext(), "성별란 체크 필수", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if (major.trim().length() == 0) {
+                                Toast.makeText(getApplicationContext(), "전공 기입 필수", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if (strScore.trim().length() == 0) {
+                                Toast.makeText(getApplicationContext(), "점수 기입 필수", Toast.LENGTH_SHORT).show();
+                                return;
+                            } else {
+                                try {
+                                    score = Integer.parseInt(strScore);
+                                    if(score > 100 || score < 1) {
+                                        Toast.makeText(getApplicationContext(), "1~100사이의 숫자만 입력 가능", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                } catch (NumberFormatException e) {
+                                    Toast.makeText(getApplicationContext(), "1~100사이의 숫자를 입력해주세요.", Toast.LENGTH_SHORT).show();                        return;
+                                }
+
+                            }
+
+                            //Update
+                            String btnText = btnUpdate.getText().toString();
+                            if (btnText.equals("수정하기")) {
+
+                                btnUpdate.setText("수정완료");
+                            } else if (btnText.equals("수정완료")) {
+                                SQLiteDatabase db = helper.getWritableDatabase();
+                                String sql = "update tbl_student" +
+                                        "     set sno = ?," +
+                                        "         sname = ?," +
+                                        "         syear = ?," +
+                                        "         gender = ?," +
+                                        "         major = ?," +
+                                        "         score = ?" +
+                                        "     where sno = ?";
+                                Object[] params = {sno, sname, syear, gender, major, score, vo.getSno()};
+                                db.execSQL(sql, params);
+                                btnSelectAll.callOnClick();
+                                btnUpdate.setText("수정하기");
+                            }
+
+
+                        }
+                    });
+                    btnDelete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String sql = "delete from tbl_student" +
+                                    "     where sno = '" + vo.getSno() +"'";
+                            SQLiteDatabase db = helper.getWritableDatabase();
+                            db.execSQL(sql);
+                            btnSelectAll.callOnClick();
                         }
                     });
                     dlg.setPositiveButton("닫기", null);
