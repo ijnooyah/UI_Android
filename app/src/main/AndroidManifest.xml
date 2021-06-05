@@ -9,7 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.UI_Android">
-        <activity android:name=".ContentActivity"></activity>
         <activity android:name=".DetailActivity" />
         <activity android:name=".InsertActivity" />
         <activity android:name=".MainActivity">
