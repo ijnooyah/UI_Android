@@ -6,27 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:orientation="vertical">
-
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+        <EditText
+            android:id="@+id/edtSelect"
+            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"/>
         <Button
-            android:id="@+id/btnSelectAll"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnSelect"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="전체조회"/>
-        <Button
-            android:id="@+id/btnDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="상세조회"/>
+            android:layout_weight="1"
+            android:text="조회"/>
         <Button
             android:id="@+id/btnInsert"
-            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="학생등록"/>
+            android:text="등록"/>
     </LinearLayout>
+  <!--  <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content" />-->
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -60,7 +71,7 @@
         </TableRow>
     </TableLayout>
     <ListView
-        android:id="@+id/lvAll"
+        android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>

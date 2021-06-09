@@ -11,36 +11,57 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    Button btnSelectAll, btnDetail, btnInsert;
-    ListView lvAll;
+    Button btnSelect, btnInsert;
+    ListView listview;
     MyListAdapter adapter;
     MyDBHelper helper;
     List<StudentVo> list;
+    Spinner spinner;
+    EditText edtSelect;
+    ArrayAdapter<String> sAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnSelectAll = findViewById(R.id.btnSelectAll);
-        btnDetail = findViewById(R.id.btnDetail);
+
+        btnSelect = findViewById(R.id.btnSelect);
         btnInsert = findViewById(R.id.btnInsert);
-        lvAll = findViewById(R.id.lvAll);
+        btnInsert = findViewById(R.id.btnInsert);
+        listview = findViewById(R.id.listview);
+        spinner = findViewById(R.id.spinner);
+        edtSelect = findViewById(R.id.edtSelect);
+        String[] data = {"전체", "이름", "전공"};
+        sAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, data);
+        spinner.setAdapter(sAdapter);
+//        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
         helper = new MyDBHelper(getApplicationContext(), "StudentDB", null, 1);
 
 
-        btnSelectAll.setOnClickListener(this);
-        btnDetail.setOnClickListener(this);
+        btnSelect.setOnClickListener(this);
         btnInsert.setOnClickListener(this);
 
 
@@ -48,38 +69,94 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (v == btnSelectAll) {
-            list = new ArrayList<>();
+        if (v == btnSelect) {
+            String slectedItem = spinner.getSelectedItem().toString();
+            if (slectedItem.equals("이름")) {
+                Log.d("mytag", "학번선택");
+                list = new ArrayList<>();
+                String name = edtSelect.getText().toString();
+                if(name.trim().length() == 0) {
+                    Toast.makeText(getApplicationContext(), "검색어를 입력해 주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 //            Log.d("mytag", "selectAll");
-            SQLiteDatabase db = helper.getReadableDatabase();
-            String sql = "select * from tbl_student" +
-                    "     order by sno";
-            Cursor cursor = db.rawQuery(sql, null);
-            while (cursor.moveToNext()) {
-                String sno = cursor.getString(0);
-                String sname = cursor.getString(1);
-                int syear = cursor.getInt(2);
-                String gender = cursor.getString(3);
-                String major = cursor.getString(4);
-                int score = cursor.getInt(5);
-                StudentVo vo = new StudentVo(sno, sname, syear, gender, major, score);
-                list.add(vo);
-            }
-            adapter = new MyListAdapter(this, R.layout.listview, list);
-            lvAll.setAdapter(adapter);
+                SQLiteDatabase db = helper.getReadableDatabase();
+                String sql = "select * from tbl_student" +
+                        "     where sname like '%" + name + "%'" +
+                        "     order by sno";
+                Cursor cursor = db.rawQuery(sql, null);
+                while (cursor.moveToNext()) {
+                    String sno = cursor.getString(0);
+                    String sname = cursor.getString(1);
+                    int syear = cursor.getInt(2);
+                    String gender = cursor.getString(3);
+                    String major = cursor.getString(4);
+                    int score = cursor.getInt(5);
+                    StudentVo vo = new StudentVo(sno, sname, syear, gender, major, score);
+                    list.add(vo);
+                }
+                adapter = new MyListAdapter(MainActivity.this, R.layout.listview, list);
+                listview.setAdapter(adapter);
+                cursor.close();
+            } else if (slectedItem.equals("전공")) {
+                Log.d("mytag", "전공선택");
+                list = new ArrayList<>();
+                String smajor = edtSelect.getText().toString().trim();
+                if(smajor.trim().length() == 0) {
+                    Toast.makeText(getApplicationContext(), "검색어를 입력해 주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+//            Log.d("mytag", "selectAll");
+                SQLiteDatabase db = helper.getReadableDatabase();
+                String sql = "select * from tbl_student" +
+                        "     where major like '%" + smajor + "%'" +
+                        "     order by sno";
+                Cursor cursor = db.rawQuery(sql, null);
+                Log.d("mytag", cursor.toString());
+                while (cursor.moveToNext()) {
+                    String sno = cursor.getString(0);
+                    String sname = cursor.getString(1);
+                    int syear = cursor.getInt(2);
+                    String gender = cursor.getString(3);
+                    String major = cursor.getString(4);
+                    int score = cursor.getInt(5);
+                    StudentVo vo = new StudentVo(sno, sname, syear, gender, major, score);
+                    list.add(vo);
+                }
+                adapter = new MyListAdapter(MainActivity.this, R.layout.listview, list);
+                listview.setAdapter(adapter);
+                cursor.close();
+            } else if (slectedItem.equals("전체")) {
+                list = new ArrayList<>();
 
-            lvAll.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                SQLiteDatabase db = helper.getReadableDatabase();
+                String sql = "select * from tbl_student" +
+                        "     order by sno";
+                Cursor cursor = db.rawQuery(sql, null);
+                while (cursor.moveToNext()) {
+                    String sno = cursor.getString(0);
+                    String sname = cursor.getString(1);
+                    int syear = cursor.getInt(2);
+                    String gender = cursor.getString(3);
+                    String major = cursor.getString(4);
+                    int score = cursor.getInt(5);
+                    StudentVo vo = new StudentVo(sno, sname, syear, gender, major, score);
+                    list.add(vo);
+                }
+                adapter = new MyListAdapter(this, R.layout.listview, list);
+                listview.setAdapter(adapter);
+            }
+
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     //다이얼로그 만들기
                     AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
-                    dlg.setTitle("수정또는 삭제 하기");
                     View dlgView = View.inflate(MainActivity.this, R.layout.dialog_content, null);
                     dlg.setView(dlgView);
                     //다이얼로그에 학생상세정보 끌고오기
                     StudentVo vo = list.get(position);
                     EditText edtSNo2, edtSName2, edtSYear2, edtMajor2, edtScore2;
-                    RadioGroup rGroup2;
                     RadioButton rdoMale2, rdoFemale2;
                     Button btnUpdate, btnDelete;
                     edtSNo2 = dlgView.findViewById(R.id.edtSNo2);
@@ -87,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     edtSYear2 = dlgView.findViewById(R.id.edtSYear2);
                     edtMajor2 = dlgView.findViewById(R.id.edtMajor2);
                     edtScore2 = dlgView.findViewById(R.id.edtScore2);
-                    rGroup2 = dlgView.findViewById(R.id.rGroup2);
                     rdoMale2 = dlgView.findViewById(R.id.rdoMale2);
                     rdoFemale2 = dlgView.findViewById(R.id.rdoFemale2);
                     btnUpdate = dlgView.findViewById(R.id.btnUpdate);
@@ -106,16 +182,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void onClick(View v) {
 
-                            edtSNo2.setEnabled(true);
                             edtSName2.setEnabled(true);
                             edtSYear2.setEnabled(true);
                             edtMajor2.setEnabled(true);
                             edtScore2.setEnabled(true);
-                            edtSNo2.setEnabled(true);
                             rdoMale2.setClickable(true);
                             rdoFemale2.setClickable(true);
 
-                            String sno = edtSNo2.getText().toString();
                             String sname = edtSName2.getText().toString();
                             String strYear = edtSYear2.getText().toString();
                             int syear;
@@ -131,10 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                             // 입력사항 조건 설정
 
-                            if (sno.trim().length() == 0) {
-                                Toast.makeText(getApplicationContext(), "학번 기입 필수", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
+
                             if (sname.trim().length() == 0) {
                                 Toast.makeText(getApplicationContext(), "이름 기입 필수", Toast.LENGTH_SHORT).show();
                                 return;
@@ -186,16 +256,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             } else if (btnText.equals("수정완료")) {
                                 SQLiteDatabase db = helper.getWritableDatabase();
                                 String sql = "update tbl_student" +
-                                        "     set sno = ?," +
-                                        "         sname = ?," +
+                                        "     set sname = ?," +
                                         "         syear = ?," +
                                         "         gender = ?," +
                                         "         major = ?," +
                                         "         score = ?" +
                                         "     where sno = ?";
-                                Object[] params = {sno, sname, syear, gender, major, score, vo.getSno()};
+                                Object[] params = {sname, syear, gender, major, score, vo.getSno()};
                                 db.execSQL(sql, params);
-                                btnSelectAll.callOnClick();
+                                Toast.makeText( MainActivity.this, "수정완료", Toast.LENGTH_SHORT).show();
                                 btnUpdate.setText("수정하기");
                             }
 
@@ -209,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     "     where sno = '" + vo.getSno() +"'";
                             SQLiteDatabase db = helper.getWritableDatabase();
                             db.execSQL(sql);
-                            btnSelectAll.callOnClick();
+                            Toast.makeText( MainActivity.this, "삭제완료", Toast.LENGTH_SHORT).show();
                         }
                     });
                     dlg.setPositiveButton("닫기", null);
@@ -217,10 +286,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     dlg.show();
                 }
             });
-        } else if (v == btnDetail) {
-//            Log.d("mytag", "Detail");
-            Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-            startActivity(intent);
         } else if (v == btnInsert) {
 //            Log.d("mytag", "Insert");
             Intent intent = new Intent(MainActivity.this, InsertActivity.class);
