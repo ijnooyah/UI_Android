@@ -14,11 +14,11 @@ public class MyDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql = "create table tbl_student (" +
-                "      sno char(8) primary key," +
-                "    sname char(10) not null," +
+                "      sno char primary key," +
+                "    sname char not null," +
                 "    syear int not null," +
-                "    gender char(3) not null," +
-                "    major char(10) not null," +
+                "    gender char not null," +
+                "    major char not null," +
                 "    score int not null default 0)";
         db.execSQL(sql);
     }

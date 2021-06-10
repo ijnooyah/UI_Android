@@ -149,6 +149,22 @@ public class InsertActivity extends AppCompatActivity {
 
                 }
 
+                // 바이트 체크
+                byte[] snoBytes = sno.getBytes();
+                if(snoBytes.length > 8) {
+                    Toast.makeText(getApplicationContext(), "학번은 8자리까지만 가능합니다.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                byte[] snameBytes = sname.getBytes();
+                if(snameBytes.length > 10) {
+                    Toast.makeText(getApplicationContext(), "입력가능한 글자를 초과했습니다.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                byte[] majorBytes = major.getBytes();
+                if(majorBytes.length > 10) {
+                    Toast.makeText(getApplicationContext(), "입력가능한 글자를 초과했습니다.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 //insert
 //                StudentVo vo = new StudentVo(sno, sname, syear, gender, major, score);
                 SQLiteDatabase db = helper.getWritableDatabase();
